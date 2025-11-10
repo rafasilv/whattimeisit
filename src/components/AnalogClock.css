@@ -1,0 +1,134 @@
+.analog-clock {
+  position: relative;
+  border-radius: 50%;
+  border: 2px solid var(--clock-color, #d4af37);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 
+    inset 0 0 10px rgba(0, 0, 0, 0.1),
+    0 0 5px rgba(212, 175, 55, 0.3),
+    0 0 10px rgba(212, 175, 55, 0.2);
+  overflow: visible;
+}
+
+/* Ajustes para relógios maiores */
+.analog-clock.large-clock {
+  border-width: 4px;
+  box-shadow: 
+    inset 0 0 20px rgba(0, 0, 0, 0.1),
+    0 0 10px rgba(212, 175, 55, 0.3),
+    0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+.clock-face {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+/* Marcações das horas */
+.hour-mark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1px;
+  height: 3px;
+  background: var(--clock-color, #d4af37);
+  transform-origin: 0 0;
+  border-radius: 0.5px;
+  box-shadow: 0 0 1px rgba(212, 175, 55, 0.5);
+}
+
+.main-mark {
+  width: 2px;
+  height: 5px;
+  box-shadow: 0 0 2px rgba(212, 175, 55, 0.7);
+}
+
+/* Ajustes para relógios maiores */
+.analog-clock.large-clock .hour-mark {
+  width: 2px;
+  height: 8px;
+}
+
+.analog-clock.large-clock .main-mark {
+  width: 3px;
+  height: 12px;
+}
+
+/* Ponteiros */
+.hand {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: center bottom;
+  background: var(--clock-color, #d4af37);
+  border-radius: 2px;
+  box-shadow: 0 0 2px rgba(212, 175, 55, 0.5);
+  z-index: 2;
+}
+
+.hour-hand {
+  width: 3px;
+  height: 25%;
+  transform: translate(-50%, -100%);
+}
+
+.minute-hand {
+  width: 2px;
+  height: 40%;
+  transform: translate(-50%, -100%);
+  z-index: 3;
+}
+
+/* Ajustes para relógios maiores */
+.analog-clock.large-clock .hour-hand {
+  width: 5px;
+  height: 25%;
+}
+
+.analog-clock.large-clock .minute-hand {
+  width: 3px;
+  height: 40%;
+}
+
+/* Animações */
+@keyframes rotateHour {
+  from {
+    transform: translate(-50%, -100%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -100%) rotate(360deg);
+  }
+}
+
+@keyframes rotateMinute {
+  from {
+    transform: translate(-50%, -100%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -100%) rotate(360deg);
+  }
+}
+
+/* Centro do relógio */
+.clock-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px;
+  height: 4px;
+  background: var(--clock-color, #d4af37);
+  border-radius: 50%;
+  z-index: 4;
+  box-shadow: 0 0 1.5px rgba(212, 175, 55, 0.6);
+}
+
+/* Ajustes para relógios maiores */
+.analog-clock.large-clock .clock-center {
+  width: 8px;
+  height: 8px;
+  box-shadow: 0 0 3px rgba(212, 175, 55, 0.6);
+}
+
