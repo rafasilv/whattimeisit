@@ -120,6 +120,16 @@ function GameScreen({ hero, onGameOver, onRestart, onExit }) {
     }
   }, [gameStarted, generateNewTime])
 
+  // Remover foco dos botões quando uma nova pergunta é gerada
+  useEffect(() => {
+    if (gameStarted && !showFeedback && !showTimeOver && !gameOver) {
+      // Remover foco de qualquer elemento ativo
+      if (document.activeElement && document.activeElement.blur) {
+        document.activeElement.blur()
+      }
+    }
+  }, [currentHour, currentMinute, questionsAnswered, gameStarted, showFeedback, showTimeOver, gameOver])
+
   // Tocar som tic-tac durante o jogo
   useEffect(() => {
     if (gameOver || !gameStarted || showFeedback || isProcessing || showTimeOver) {
@@ -325,17 +335,19 @@ function GameScreen({ hero, onGameOver, onRestart, onExit }) {
           </div>
           {renderHearts()}
         </div>
-        <div className="timer-container">
-          <span className="timer-label">Time:</span>
-          <span className="timer-value">{formatTime(timeLeft)}</span>
-        </div>
-        <div className="score-container">
-          <span className="score-label">Points:</span>
-          <span className="score-value">{score}</span>
-        </div>
-        <div className="questions-container">
-          <span className="questions-label">Question:</span>
-          <span className="questions-value">{questionsAnswered}/{MAX_QUESTIONS}</span>
+        <div className="game-header-stats">
+          <div className="timer-container">
+            <span className="timer-label">Time:</span>
+            <span className="timer-value">{formatTime(timeLeft)}</span>
+          </div>
+          <div className="score-container">
+            <span className="score-label">Points:</span>
+            <span className="score-value">{score}</span>
+          </div>
+          <div className="questions-container">
+            <span className="questions-label">Question:</span>
+            <span className="questions-value">{questionsAnswered}/{MAX_QUESTIONS}</span>
+          </div>
         </div>
       </div>
 
@@ -359,7 +371,7 @@ function GameScreen({ hero, onGameOver, onRestart, onExit }) {
         <div className="options-container">
           {options.map((option, index) => (
             <button
-              key={index}
+              key={`${questionsAnswered}-${currentHour}-${currentMinute}-${index}`}
               className={`option-button ${isProcessing ? 'disabled' : ''}`}
               onClick={() => handleAnswer(option)}
               disabled={gameOver || isProcessing}
