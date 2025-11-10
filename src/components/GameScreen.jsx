@@ -123,10 +123,21 @@ function GameScreen({ hero, onGameOver, onRestart, onExit }) {
   // Remover foco dos botões quando uma nova pergunta é gerada
   useEffect(() => {
     if (gameStarted && !showFeedback && !showTimeOver && !gameOver) {
-      // Remover foco de qualquer elemento ativo
-      if (document.activeElement && document.activeElement.blur) {
-        document.activeElement.blur()
-      }
+      // Remover foco de qualquer elemento ativo (especialmente importante para iOS)
+      setTimeout(() => {
+        if (document.activeElement && document.activeElement.blur) {
+          document.activeElement.blur()
+        }
+        // Forçar remoção de foco de todos os botões
+        const buttons = document.querySelectorAll('.option-button')
+        buttons.forEach(button => {
+          if (button.blur) {
+            button.blur()
+          }
+          // Remover classes de estado ativo do iOS
+          button.classList.remove('active', 'focus')
+        })
+      }, 100)
     }
   }, [currentHour, currentMinute, questionsAnswered, gameStarted, showFeedback, showTimeOver, gameOver])
 
@@ -230,6 +241,18 @@ function GameScreen({ hero, onGameOver, onRestart, onExit }) {
           
           // Continuar jogo após feedback
           setTimeout(() => {
+            // Remover foco de todos os botões antes de gerar nova pergunta (especialmente para iOS)
+            const buttons = document.querySelectorAll('.option-button')
+            buttons.forEach(button => {
+              if (button.blur) {
+                button.blur()
+              }
+              button.classList.remove('active', 'focus')
+            })
+            if (document.activeElement && document.activeElement.blur) {
+              document.activeElement.blur()
+            }
+            
             setTimeLeft(60) // Resetar cronômetro
             generateNewTime() // Nova pergunta
             setShowFeedback(false)
@@ -257,6 +280,18 @@ function GameScreen({ hero, onGameOver, onRestart, onExit }) {
   const handleContinueAfterError = () => {
     // Tocar som de clique
     playClickSound()
+    
+    // Remover foco de todos os botões antes de continuar (especialmente para iOS)
+    const buttons = document.querySelectorAll('.option-button')
+    buttons.forEach(button => {
+      if (button.blur) {
+        button.blur()
+      }
+      button.classList.remove('active', 'focus')
+    })
+    if (document.activeElement && document.activeElement.blur) {
+      document.activeElement.blur()
+    }
     
     setShowFeedback(false)
     setFeedbackType(null)

@@ -257,6 +257,11 @@
   letter-spacing: 2px;
   width: 100%;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
 }
 
 .option-button:hover:not(:disabled) {
@@ -282,11 +287,20 @@
 
 .option-button:focus {
   outline: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .option-button:focus:not(:disabled):not(.disabled) {
-  outline: 2px solid rgba(255, 255, 255, 0.5);
-  outline-offset: 2px;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.option-button:active {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.option-button:visited {
+  -webkit-tap-highlight-color: transparent;
 }
 
 .feedback-overlay {
