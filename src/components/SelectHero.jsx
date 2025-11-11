@@ -127,6 +127,8 @@ function SelectHero({ onSelectHero }) {
               autoPlay
               muted
               loop
+              playsInline
+              webkit-playsinline="true"
               onEnded={handleVideoEnd}
             />
             <div className="hero-selection-buttons">

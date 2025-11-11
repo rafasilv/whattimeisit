@@ -27,6 +27,7 @@ function GameScreen({ hero, onGameOver, onRestart, onExit }) {
   const [responseTimes, setResponseTimes] = useState([]) // Tempos de resposta para respostas corretas
   const [correctAnswersCount, setCorrectAnswersCount] = useState(0) // Número de respostas corretas
   const [showExitConfirmation, setShowExitConfirmation] = useState(false) // Mostrar confirmação de saída
+  const [buttonKey, setButtonKey] = useState(0) // Key para forçar remontagem dos botões (especialmente para iOS)
   const MAX_QUESTIONS = 20
 
   // Referências para os sons
@@ -134,12 +135,17 @@ function GameScreen({ hero, onGameOver, onRestart, onExit }) {
           if (button.blur) {
             button.blur()
           }
-          // Remover classes de estado ativo do iOS
-          button.classList.remove('active', 'focus')
+          // Remover todos os estados possíveis
+          button.classList.remove('active', 'focus', 'hover', 'pressed')
+          // Forçar reset de estilo inline
+          button.style.transform = ''
+          button.style.boxShadow = ''
+          button.style.borderColor = ''
+          button.style.background = ''
         })
-      }, 100)
+      }, 150)
     }
-  }, [currentHour, currentMinute, questionsAnswered, gameStarted, showFeedback, showTimeOver, gameOver])
+  }, [currentHour, currentMinute, questionsAnswered, buttonKey, gameStarted, showFeedback, showTimeOver, gameOver])
 
   // Tocar som tic-tac durante o jogo
   useEffect(() => {
@@ -241,17 +247,28 @@ function GameScreen({ hero, onGameOver, onRestart, onExit }) {
           
           // Continuar jogo após feedback
           setTimeout(() => {
+            // Forçar remontagem dos botões (especialmente importante para iOS)
+            setButtonKey(prev => prev + 1)
+            
             // Remover foco de todos os botões antes de gerar nova pergunta (especialmente para iOS)
-            const buttons = document.querySelectorAll('.option-button')
-            buttons.forEach(button => {
-              if (button.blur) {
-                button.blur()
+            setTimeout(() => {
+              const buttons = document.querySelectorAll('.option-button')
+              buttons.forEach(button => {
+                if (button.blur) {
+                  button.blur()
+                }
+                // Remover todos os estados possíveis
+                button.classList.remove('active', 'focus', 'hover', 'pressed')
+                // Forçar reset de estilo inline
+                button.style.transform = ''
+                button.style.boxShadow = ''
+                button.style.borderColor = ''
+                button.style.background = ''
+              })
+              if (document.activeElement && document.activeElement.blur) {
+                document.activeElement.blur()
               }
-              button.classList.remove('active', 'focus')
-            })
-            if (document.activeElement && document.activeElement.blur) {
-              document.activeElement.blur()
-            }
+            }, 50)
             
             setTimeLeft(60) // Resetar cronômetro
             generateNewTime() // Nova pergunta
@@ -281,17 +298,28 @@ function GameScreen({ hero, onGameOver, onRestart, onExit }) {
     // Tocar som de clique
     playClickSound()
     
+    // Forçar remontagem dos botões (especialmente importante para iOS)
+    setButtonKey(prev => prev + 1)
+    
     // Remover foco de todos os botões antes de continuar (especialmente para iOS)
-    const buttons = document.querySelectorAll('.option-button')
-    buttons.forEach(button => {
-      if (button.blur) {
-        button.blur()
+    setTimeout(() => {
+      const buttons = document.querySelectorAll('.option-button')
+      buttons.forEach(button => {
+        if (button.blur) {
+          button.blur()
+        }
+        // Remover todos os estados possíveis
+        button.classList.remove('active', 'focus', 'hover', 'pressed')
+        // Forçar reset de estilo inline
+        button.style.transform = ''
+        button.style.boxShadow = ''
+        button.style.borderColor = ''
+        button.style.background = ''
+      })
+      if (document.activeElement && document.activeElement.blur) {
+        document.activeElement.blur()
       }
-      button.classList.remove('active', 'focus')
-    })
-    if (document.activeElement && document.activeElement.blur) {
-      document.activeElement.blur()
-    }
+    }, 50)
     
     setShowFeedback(false)
     setFeedbackType(null)
@@ -406,9 +434,13 @@ function GameScreen({ hero, onGameOver, onRestart, onExit }) {
         <div className="options-container">
           {options.map((option, index) => (
             <button
-              key={`${questionsAnswered}-${currentHour}-${currentMinute}-${index}`}
+              key={`${buttonKey}-${questionsAnswered}-${currentHour}-${currentMinute}-${index}`}
               className={`option-button ${isProcessing ? 'disabled' : ''}`}
               onClick={() => handleAnswer(option)}
+              onTouchEnd={(e) => {
+                // Forçar blur imediatamente após toque no iOS
+                e.currentTarget.blur()
+              }}
               disabled={gameOver || isProcessing}
             >
               {option}
@@ -493,6 +525,8 @@ function GameScreen({ hero, onGameOver, onRestart, onExit }) {
                 autoPlay
                 muted
                 loop
+                playsInline
+                webkit-playsinline="true"
               />
             )}
             {gameCompleted && hero && hero.video && (
@@ -502,6 +536,8 @@ function GameScreen({ hero, onGameOver, onRestart, onExit }) {
                 autoPlay
                 muted
                 loop
+                playsInline
+                webkit-playsinline="true"
               />
             )}
             <h2 className="game-over-title">

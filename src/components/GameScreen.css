@@ -278,6 +278,11 @@
   transform: translateY(-2px) scale(1.02);
 }
 
+/* Forçar reset de estado ativo no iOS */
+.option-button:not(:active) {
+  transform: none !important;
+}
+
 .option-button:disabled,
 .option-button.disabled {
   opacity: 0.5;
