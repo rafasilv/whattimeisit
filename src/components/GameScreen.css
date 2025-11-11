@@ -283,6 +283,22 @@
   transform: none !important;
 }
 
+/* Reset completo de estado no iOS após interação */
+@supports (-webkit-touch-callout: none) {
+  .option-button {
+    -webkit-tap-highlight-color: transparent !important;
+  }
+  
+  .option-button:active {
+    -webkit-tap-highlight-color: transparent !important;
+  }
+  
+  .option-button:focus {
+    -webkit-tap-highlight-color: transparent !important;
+    outline: none !important;
+  }
+}
+
 .option-button:disabled,
 .option-button.disabled {
   opacity: 0.5;
