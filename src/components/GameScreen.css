@@ -219,11 +219,10 @@
   font-size: 3rem;
   color: #ffffff;
   margin: 0;
-  text-shadow: 
-    0 0 8px rgba(255, 255, 255, 0.3),
-    0 0 15px rgba(255, 107, 107, 0.2);
-  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.2));
   letter-spacing: 2px;
+  -webkit-text-stroke: 4px rgba(0, 0, 0, 0.8);
+  text-stroke: 4px rgba(0, 0, 0, 0.8);
+  paint-order: stroke fill;
 }
 
 .options-container {
